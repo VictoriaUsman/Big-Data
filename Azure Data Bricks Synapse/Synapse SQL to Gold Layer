@@ -1,0 +1,20 @@
+--select * from sys.database_credentials
+
+--CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'TheGhost1!';
+--CREATE DATABASE SCOPED CREDENTIAL iantrisdc WITH IDENTITY = 'Managed Identity';
+
+CREATE EXTERNAL FILE FORMAT extfileformat WITH (
+    FORMAT_TYPE = PARQUET,
+    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'
+);
+CREATE EXTERNAL DATA SOURCE goldlayer WITH (
+    LOCATION = 'https://olistdataiantristan.dfs.core.windows.net/oliststorage/gold/',
+    CREDENTIAL = iantrisdc
+);
+
+CREATE EXTERNAL TABLE orderstat.orderstable WITH (
+        LOCATION = 'serving',
+        DATA_SOURCE = goldlayer,
+        FILE_FORMAT = extfileformat
+) AS
+SELECT * FROM orderstat.orders;
