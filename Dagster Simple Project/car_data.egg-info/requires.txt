@@ -1,0 +1,7 @@
+dagster
+dagster-cloud
+polars>=1.36.1
+
+[dev]
+dagster-webserver
+pytest
